@@ -113,9 +113,11 @@ function temp(){
         }
       if(incidentDetails[index].criticality== "minor")
         L.polyline(roadCoords, {color: 'orange'}).addTo(map).bindPopup(getPopup(incidentDetails[index]),customOptions);
-      else
+      else if(incidentDetails[index].roadClosed)
+        L.polyline(roadCoords, {color: 'black'}).addTo(map).bindPopup(getPopup(incidentDetails[index]),customOptions);
+      else 
       L.polyline(roadCoords, {color: 'red'}).addTo(map).bindPopup(getPopup(incidentDetails[index]),customOptions);
-  })
+    })
 
 // map.fitBounds(polyline.getBounds())
 }
