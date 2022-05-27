@@ -186,5 +186,9 @@ L.Routing.control({
     color:'blue',
     opacity: 1,
     weight: 2
-  }]}
+  }]},
+  collapsible:true
 }).addTo(map);
+L.Routing.itinerary({
+  
+})
