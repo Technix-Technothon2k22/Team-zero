@@ -179,7 +179,7 @@ map.on('click', async function(e) {
 L.Routing.control({
   waypoints: [
       L.latLng(15.267625485271353, 73.95961761474608),
-      L.latLng( 15.245102293646266, 15.245102293646266)
+      L.latLng( 18.5204, 73.8567)
   ],
   routeWhileDragging: true,
   showAlternatives: true,

@@ -19,8 +19,22 @@
     width: max-content;
 }
 
-#legend{
-    
+.legend{
+  display: flex;
+  flex-direction: row;
+}
+.legend-secondary{
+  display: flex;
+  justify-content: space-between;
+}
+
+.svgimg{
+  width: 70px;
+  height: 75px;
+}
+
+.legend-item{
+  margin-left: 25px
 }
 
 @import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css';
