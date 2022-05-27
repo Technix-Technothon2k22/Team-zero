@@ -1,0 +1,152 @@
+#main-container{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: stretch;
+    flex-wrap: wrap;
+    margin: 20px;
+
+}
+#secondary-container{
+    min-width: 400px;
+    background-color: rgb(233, 253, 253);
+    box-shadow: 0px 0px 2px 2px rgb(152, 252, 252);
+    min-height: 50%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    width: max-content;
+}
+
+#legend{
+    
+}
+
+@import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css';
+#mapCanvas{
+  z-index: 100;
+  height: 100vh;
+  position: relative;
+  }
+
+textarea{
+  background-color: #FFF;
+}
+
+.customButtonStyle{
+  color: #FFF;
+  background-color: #ff702d;
+}
+.customDiv{
+  background: white;
+  width: 250px;
+  display: inline-block;
+  margin: 0 auto;
+  border-radius: 15px;
+  position: relative;
+  text-align: center;
+  box-shadow: -1px 15px 30px -12px black;
+  z-index: 9999;
+}
+.customDiv1{
+ color: #EC9B3B;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 3px;
+}
+.customDiv2{
+  font-size: 26px;
+  color: black;
+  font-weight: 900;
+  margin-bottom: 5px;
+}
+.customDiv3{
+  padding: 20px;
+  margin-bottom: 10px;  
+}
+.cardsBottom{
+color: white;
+font-weight: 700;
+border-bottom-left-radius: 14px;
+border-bottom-right-radius: 14px;
+display:flex;
+background:  	#FF69B4;
+background: rgb(133,253,29);
+background: linear-gradient(60deg, rgba(133,253,29,0.783333401720063) 0%, rgba(246,72,153,1) 0%, rgba(245,221,71,1) 0%, rgba(227,21,124,1) 100%); 
+   border-right: 1px solid #BD7C2F;
+}
+.onethird{
+   border-right: 1px solid pink;
+    width: 33%;
+    float: left;
+    padding: 5px 15px;
+}
+.lastElement{
+   border: none;
+    width: 33%;
+    float: left;
+    padding: 5px 15px;
+}
+.customDivImg{
+  position: relative;
+  height: 100px;
+  margin-bottom: 35px;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+}
+.stat {
+    position: relative;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  .stat-value {
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 12px;
+  }
+.flipCard{
+   width: 249px;
+  height: 200px;
+  
+   perspective: 1000px;
+}
+.flipCardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+.flipCard:hover .flipCardInner {
+  transform: rotateY(180deg);
+}
+.flipCardFront, .flipCardBack {
+  position: absolute;
+ 
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+
+}
+/* Style the front side (fallback if image is missing) */
+
+
+/* Style the back side */
+.flipCardBack {
+  background: white;
+  transform: rotateY(180deg);
+}
+/* .leaflet-popup-tip {
+background:#FF69B4;
+} */
+.leaflet-popup-content-wrapper{
+  background: none;
+  box-shadow: none;
+}
+.leaflet-popup-content {
+    margin: 0 0;
+}
+
+
