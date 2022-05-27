@@ -6,22 +6,23 @@ var initIncidents=[]
 var initLat;
 var initLong;
 // load a tile layer
-function getPopup(){
+function getPopup(details){
   var container = L.DomUtil.create('div','customDiv')
       var img= this.createDiv('level 4',container,"customDivImg")
       var flipC=this.createDiv('', container, "flipCard")
       var flipCard=this.createDiv('', flipC, "flipCardInner")
         var flipCardFront=this.createDiv('', flipCard, "flipCardFront")
-          var  text1 = this.createDiv('Level 4', flipCardFront, "customDiv1")
-          var  text2 = this.createDiv('The Barbarian', flipCardFront, "customDiv2") 
-          var  text2 = this.createDiv('The Barbarian is a kilt-clad Scottish warrior with an angry, battle-ready expression, hungry for destruction. He has Killer yellow horseshoe mustache.', flipCardFront, "customDiv3") 
+          var  text1 = this.createDiv(details.criticality, flipCardFront, "customDiv1")
+          var  text2 = this.createDiv(details.type, flipCardFront, "customDiv2") 
+          var  text2 = this.createDiv(details.roadClosed, flipCardFront, "customDiv3") 
          var flipCardBack=this.createDiv('', flipCard, "flipCardBack")
-          var  text1 = this.createDiv('Level 5', flipCardBack, "customDiv1")
-          var  text2 = this.createDiv('The Archer', flipCardBack, "customDiv2") 
-          var  text2 = this.createDiv('The Archer is a kilt-clad Scottish warrior with an angry, battle-ready expression, hungry for destruction. He has Killer yellow horseshoe mustache.', flipCardBack, "customDiv3") 
-      var  cards = this.createDiv('', container, "cardsBottom")
+          var  text2 = this.createDiv(details.description.value, flipCardBack, "customDiv3") 
+          var  text1 = this.createDiv('', flipCardBack, "customDiv1")
+          var  text2 = this.createDiv('', flipCardBack, "customDiv2") 
+      
+          var  cards = this.createDiv('', container, "cardsBottom")
           var card1= this.createDiv('', cards, "onethird")
-            var text3= this.createDiv('20S', card1, "stat")
+            var text3= this.createDiv('details.', card1, "stat")
             var text4= this.createDiv('Training', card1, "stat-value")
   
           var card2= this.createDiv('', cards, "onethird")
@@ -85,21 +86,23 @@ function displayPoints(){
 }
 function temp(){
   var drawPoints=[]
+  var incidentDetails=[]
   //populate all the features
   incidents.forEach(incident=>{
   incident.location.shape.links.forEach(link=>{
+    incidentDetails.push(incident.incidentDetails)
     drawPoints.push(link.points)
     })
   })
+  // console.log(incidentDetails.length)
+  // console.log(drawPoints.length)
 
-
-  console.log(JSON.stringify(drawPoints))
-  drawPoints.forEach(road=>{
+  // console.log(JSON.stringify(drawPoints))
+  drawPoints.forEach((road,index)=>{
     var roadCoords=[]
     road.forEach(coords=>{
       roadCoords.push([coords.lat,coords.lng])
     })
-    console.log(roadCoords)
     var customPopup = "<b>My office</b><br/><img src='http://netdna.webdesignerdepot.com/uploads/2014/05/workspace_06_previo.jpg' alt='maptime logo gif' width='150px'/>";
     // specify popup options 
     var customOptions =
@@ -108,10 +111,10 @@ function temp(){
         'width': '200',
         'className' : 'popupCustom'
         }
-
-
-    L.polyline(roadCoords, {color: 'red'}).addTo(map).bindPopup(getPopup(),customOptions);
-
+      if(incidentDetails[index].criticality== "minor")
+        L.polyline(roadCoords, {color: 'orange'}).addTo(map).bindPopup(getPopup(incidentDetails[index]),customOptions);
+      else
+      L.polyline(roadCoords, {color: 'red'}).addTo(map).bindPopup(getPopup(incidentDetails[index]),customOptions);
   })
 
 // map.fitBounds(polyline.getBounds())
@@ -148,9 +151,7 @@ window.onload = async () => {
   const coords = await getCoords();
   L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=agLQ82PjypipwzXJBUWV',
   {
-    attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>',
-    maxZoom: 22,
-    minZoom: 9
+    attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
    
   }).addTo(map);
   const initcords = await getIncidents(coords.lat,coords.long)
@@ -172,3 +173,18 @@ map.on('click', async function(e) {
    temp()
    
 });
+
+L.Routing.control({
+  waypoints: [
+      L.latLng(15.267625485271353, 73.95961761474608),
+      L.latLng( 15.245102293646266, 15.245102293646266)
+  ],
+  routeWhileDragging: true,
+  showAlternatives: true,
+  lineOptions: {
+     styles: [{
+    color:'blue',
+    opacity: 1,
+    weight: 2
+  }]}
+}).addTo(map);
