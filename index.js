@@ -32,8 +32,36 @@ function getPopup(details){
           var card3= this.createDiv('', cards, "lastElement")
             var text7= this.createDiv('150', card3, "stat")
             var text8= this.createDiv('Cost', card3, "stat-value")
-  
+
   return container
+  }
+  function getPopup2(details){
+    var container = L.DomUtil.create('div','customDiv')
+        var flipC=this.createDiv('', container, "flipCard")
+        var flipCard=this.createDiv('', flipC, "flipCardInner")
+          var flipCardFront=this.createDiv('', flipCard, "flipCardFront")
+            var  text1 = this.createDiv("details.criticality", flipCardFront, "customDiv1")
+            var  text2 = this.createDiv("details.type", flipCardFront, "customDiv2") 
+            var  text2 = this.createDiv("details.roadClosed", flipCardFront, "customDiv3") 
+           var flipCardBack=this.createDiv('', flipCard, "flipCardBack")
+            var  text2 = this.createDiv("details.description.value", flipCardBack, "customDiv3") 
+            var  text1 = this.createDiv('', flipCardBack, "customDiv1")
+            var  text2 = this.createDiv('', flipCardBack, "customDiv2") 
+        
+            var  cards = this.createDiv('', container, "cardsBottom")
+            var card1= this.createDiv('', cards, "onethird")
+              var text3= this.createDiv('details.', card1, "stat")
+              var text4= this.createDiv('Training', card1, "stat-value")
+    
+            var card2= this.createDiv('', cards, "onethird")
+              var text5= this.createDiv('16', card2, "stat")
+              var text6= this.createDiv('Speed', card2, "stat-value")
+    
+            var card3= this.createDiv('', cards, "lastElement")
+              var text7= this.createDiv('150', card3, "stat")
+              var text8= this.createDiv('Cost', card3, "stat-value")
+        return container
+
   }
    function createButton (label, container, className) {
         var btn = L.DomUtil.create('button', '', container);
@@ -85,6 +113,12 @@ function displayPoints(){
   
 }
 function temp(){
+  var customOptions =
+  {
+  'maxWidth': '400',
+  'width': '200',
+  'className' : 'popupCustom'
+  }
   var drawPoints=[]
   var incidentDetails=[]
   //populate all the features
@@ -101,12 +135,7 @@ function temp(){
     })
     var customPopup = "<b>My office</b><br/><img src='http://netdna.webdesignerdepot.com/uploads/2014/05/workspace_06_previo.jpg' alt='maptime logo gif' width='150px'/>";
     // specify popup options 
-    var customOptions =
-        {
-        'maxWidth': '400',
-        'width': '200',
-        'className' : 'popupCustom'
-        }
+   
         if (incidentDetails[index].type == "accident")
         L.polyline(roadCoords, {color: 'red'}).addTo(map).bindPopup(getPopup(incidentDetails[index]),customOptions);
         else if(incidentDetails[index].roadClosed)
@@ -127,13 +156,15 @@ flow.forEach(flowUnit=>{
     })
     flowPoints.push(temp)
   })
+console.log(flowData.length)
+console.log(flowPoints.length)
 
   flowPoints.forEach((road,index)=>{
     var roadCoords=[]
     road.forEach(coords=>{
       roadCoords.push([coords.lat,coords.lng])
     })
-    var line=L.polyline(roadCoords, {color: 'green'}).addTo(map)
+    var line=L.polyline(roadCoords, {color: 'green'}).addTo(map).bindPopup(getPopup2(flowData[index]),customOptions)
   })
 
 }
@@ -154,6 +185,8 @@ flow.forEach(flowUnit=>{
 //     map.setView(new L.LatLng(position.coords.latitude, position.coords.longitude), 13);
 //     let userMarker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
 //   }
+
+ 
 var streets
 
 window.onload = async () => {
@@ -215,12 +248,11 @@ map.on('click', async function(e) {
    incidents=await getIncidents(e.latlng.lat,e.latlng.lng)
    flow=await getFlow(e.latlng.lat,e.latlng.lng)
    temp()
-   
 }); 
 
-L.Routing.control({
+   L.Routing.control({
   waypoints: [
-      L.latLng(15.267625485271353, 73.95961761474608),
+      L.latLng(15.41, 73.97),
       L.latLng( 18.5204, 73.8567)
   ],
   routeWhileDragging: true,
@@ -234,5 +266,4 @@ L.Routing.control({
   }]},
   collapsible:true
 }).addTo(map);
-
 
