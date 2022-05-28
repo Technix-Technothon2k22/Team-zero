@@ -40,13 +40,12 @@ function getPopup(details){
         var flipC=this.createDiv('', container, "flipCard")
         var flipCard=this.createDiv('', flipC, "flipCardInner")
           var flipCardFront=this.createDiv('', flipCard, "flipCardFront")
-            var  text1 = this.createDiv("details.criticality", flipCardFront, "customDiv1")
-            var  text2 = this.createDiv("details.type", flipCardFront, "customDiv2") 
-            var  text2 = this.createDiv("details.roadClosed", flipCardFront, "customDiv3") 
+            var  text1 = this.createDiv("traversibility"+details.traversability, flipCardFront, "customDiv1")
+            var  text2 = this.createDiv("confidence"+details.confidence, flipCardFront, "customDiv2") 
+            var  text3 = this.createDiv("length"+details.length, flipCardFront, "customDiv2") 
            var flipCardBack=this.createDiv('', flipCard, "flipCardBack")
-            var  text2 = this.createDiv("details.description.value", flipCardBack, "customDiv3") 
-            var  text1 = this.createDiv('', flipCardBack, "customDiv1")
-            var  text2 = this.createDiv('', flipCardBack, "customDiv2") 
+            var  text2 = this.createDiv("jamFactor"+details.jamFactor, flipCardBack, "customDiv3") 
+            var  text1 = this.createDiv("freeflow"+details.freeFlow, flipCardBack, "customDiv1")
         
             var  cards = this.createDiv('', container, "cardsBottom")
             var card1= this.createDiv('', cards, "onethird")
@@ -267,3 +266,8 @@ map.on('click', async function(e) {
   collapsible:true
 }).addTo(map);
 
+control.on('routeselected', function(e) {
+  var route = e.route;
+  // Do something with the route here
+  console.log(route.coordinates);
+});
