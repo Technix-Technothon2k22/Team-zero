@@ -35,12 +35,12 @@ function getPopup(details){
 
   return container
   }
-  function getPopup2(details){
+  function getPopup2(details,description){
     var container = L.DomUtil.create('div','customDiv')
         var flipC=this.createDiv('', container, "flipCard")
         var flipCard=this.createDiv('', flipC, "flipCardInner")
           var flipCardFront=this.createDiv('', flipCard, "flipCardFront")
-            var  text1 = this.createDiv("traversibility"+details.traversability, flipCardFront, "customDiv1")
+            var  text1 = this.createDiv("description"+description, flipCardFront, "customDiv1")
             var  text2 = this.createDiv("confidence"+details.confidence, flipCardFront, "customDiv2") 
             var  text3 = this.createDiv("length"+details.length, flipCardFront, "customDiv2") 
            var flipCardBack=this.createDiv('', flipCard, "flipCardBack")
@@ -146,9 +146,11 @@ function temp(){
     })
 var flowData=[]
 var flowPoints=[]
+locations=[]
 flow.forEach(flowUnit=>{
   var temp=[]
   flowData.push(flowUnit.currentFlow)
+  locations.push(flowUnit.location.description)
   flowUnit.location.shape.links.forEach(link=>{
     // flowData.push(incident.incidentDetails)
    temp=[...link.points]
@@ -163,7 +165,7 @@ console.log(flowPoints.length)
     road.forEach(coords=>{
       roadCoords.push([coords.lat,coords.lng])
     })
-    var line=L.polyline(roadCoords, {color: 'green'}).addTo(map).bindPopup(getPopup2(flowData[index]),customOptions)
+    var line=L.polyline(roadCoords, {color: 'green'}).addTo(map).bindPopup(getPopup2(flowData[index],locations[index]),customOptions)
   })
 
 }
@@ -266,8 +268,9 @@ map.on('click', async function(e) {
   collapsible:true
 }).addTo(map);
 
-control.on('routeselected', function(e) {
-  var route = e.route;
-  // Do something with the route here
-  console.log(route.coordinates);
+control.on('routesfound', function(e) {
+  var coord = e.route.coordinates;
+  var instr = e.route.instructions;
+ // L.geoJson(getInstrGeoJson(instr,coord)).addTo(map);
+ console.log(coord+"this is it")
 });
