@@ -23,16 +23,16 @@ function getPopup(details){
       
           var  cards = this.createDiv('', container, "cardsBottom")
           var card1= this.createDiv('', cards, "onethird")
-            var text3= this.createDiv('details.', card1, "stat")
-            var text4= this.createDiv('Training', card1, "stat-value")
+            // var text3= this.createDiv('details.', card1, "stat")
+            var text4= this.createDiv('lorem', card1, "stat-value")
   
           var card2= this.createDiv('', cards, "onethird")
-            var text5= this.createDiv('16', card2, "stat")
-            var text6= this.createDiv('Speed', card2, "stat-value")
+            // var text5= this.createDiv('16', card2, "stat")
+            var text6= this.createDiv('lorem', card2, "stat-value")
   
           var card3= this.createDiv('', cards, "lastElement")
-            var text7= this.createDiv('150', card3, "stat")
-            var text8= this.createDiv('Cost', card3, "stat-value")
+            // var text7= this.createDiv('150', card3, "stat")
+            var text8= this.createDiv('lorem', card3, "stat-value")
 
   return container
   }
@@ -50,16 +50,16 @@ function getPopup(details){
         
             var  cards = this.createDiv('', container, "cardsBottom")
             var card1= this.createDiv('', cards, "onethird")
-              var text3= this.createDiv('details.', card1, "stat")
-              var text4= this.createDiv('Training', card1, "stat-value")
+              // var text3= this.createDiv('details.', card1, "stat")
+              var text4= this.createDiv('lorem', card1, "stat-value")
     
             var card2= this.createDiv('', cards, "onethird")
-              var text5= this.createDiv('16', card2, "stat")
-              var text6= this.createDiv('Speed', card2, "stat-value")
+              // var text5= this.createDiv('16', card2, "stat")
+              var text6= this.createDiv('lorem', card2, "stat-value")
     
             var card3= this.createDiv('', cards, "lastElement")
-              var text7= this.createDiv('150', card3, "stat")
-              var text8= this.createDiv('Cost', card3, "stat-value")
+              // var text7= this.createDiv('150', card3, "stat")
+              var text8= this.createDiv('lorem', card3, "stat-value")
         return container
 
   }
