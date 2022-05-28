@@ -1,8 +1,9 @@
 // initialize the map
 var map = L.map('map').setView([20.5937, 78.9629], 13);
-
 var incidents=[]
 var flow=[]
+var incidentPoints=[]
+var filteredIncidentData = []
 //user location variables
 var initLat;
 var initLong;
@@ -131,7 +132,9 @@ function temp(){
     var roadCoords=[]
     road.forEach(coords=>{
       roadCoords.push([coords.lat,coords.lng])
+     
     })
+    incidentPoints.push(roadCoords)
     var customPopup = "<b>My office</b><br/><img src='http://netdna.webdesignerdepot.com/uploads/2014/05/workspace_06_previo.jpg' alt='maptime logo gif' width='150px'/>";
     // specify popup options 
    
@@ -157,9 +160,6 @@ flow.forEach(flowUnit=>{
     })
     flowPoints.push(temp)
   })
-console.log(flowData.length)
-console.log(flowPoints.length)
-
   flowPoints.forEach((road,index)=>{
     var roadCoords=[]
     road.forEach(coords=>{
@@ -251,6 +251,28 @@ map.on('click', async function(e) {
    temp()
 }); 
 
+function calcCrow(lat1, lon1, lat2, lon2) 
+    {
+      var R = 6371; // km
+      var dLat = toRad(lat2-lat1);
+      var dLon = toRad(lon2-lon1);
+      var lat1 = toRad(lat1);
+      var lat2 = toRad(lat2);
+
+      var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+      var d = R * c;
+      return d;
+    }
+
+    // Converts numeric degrees to radians
+    function toRad(Value) 
+    {
+        return Value * Math.PI / 180;
+    }
+
+
    L.Routing.control({
   waypoints: [
       L.latLng(15.41, 73.97),
@@ -266,11 +288,19 @@ map.on('click', async function(e) {
     className: 'animate'
   }]},
   collapsible:true
-}).addTo(map);
-
-control.on('routesfound', function(e) {
-  var coord = e.route.coordinates;
-  var instr = e.route.instructions;
- // L.geoJson(getInstrGeoJson(instr,coord)).addTo(map);
- console.log(coord+"this is it")
-});
+}).addTo(map)
+.on('routesfound', function(e) {
+  var routes = e.routes;
+  var filteredData=[]
+  incidentPoints.forEach(road=>{
+    filteredData.push(road[0])
+  })
+  routes.forEach(route=>{
+    for(var i=0;i<route.coordinates.length;i+=100)
+      filteredData.forEach(point=>{
+        if(calcCrow(route.coordinates[i].lat,route.coordinates[i].lng,point[0],point[1])<0.1)
+          console.log(route.coordinates[i]+" "+ point)
+      })
+  })
+ 
+})
