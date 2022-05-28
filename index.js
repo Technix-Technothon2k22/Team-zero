@@ -1,14 +1,14 @@
 // initialize the map
 var map = L.map('map').setView([20.5937, 78.9629], 13);
+
 var incidents=[]
-var initIncidents=[]
+var flow=[]
 //user location variables
 var initLat;
 var initLong;
 // load a tile layer
 function getPopup(details){
   var container = L.DomUtil.create('div','customDiv')
-      var img= this.createDiv('level 4',container,"customDivImg")
       var flipC=this.createDiv('', container, "flipCard")
       var flipCard=this.createDiv('', flipC, "flipCardInner")
         var flipCardFront=this.createDiv('', flipCard, "flipCardFront")
@@ -94,10 +94,6 @@ function temp(){
     drawPoints.push(link.points)
     })
   })
-  // console.log(incidentDetails.length)
-  // console.log(drawPoints.length)
-
-  // console.log(JSON.stringify(drawPoints))
   drawPoints.forEach((road,index)=>{
     var roadCoords=[]
     road.forEach(coords=>{
@@ -111,15 +107,35 @@ function temp(){
         'width': '200',
         'className' : 'popupCustom'
         }
-      if(incidentDetails[index].criticality== "minor")
-        L.polyline(roadCoords, {color: 'orange'}).addTo(map).bindPopup(getPopup(incidentDetails[index]),customOptions);
-      else if(incidentDetails[index].roadClosed)
+        if (incidentDetails[index].type == "accident")
+        L.polyline(roadCoords, {color: 'red'}).addTo(map).bindPopup(getPopup(incidentDetails[index]),customOptions);
+        else if(incidentDetails[index].roadClosed)
         L.polyline(roadCoords, {color: 'black'}).addTo(map).bindPopup(getPopup(incidentDetails[index]),customOptions);
-      else 
-      L.polyline(roadCoords, {color: 'red'}).addTo(map).bindPopup(getPopup(incidentDetails[index]),customOptions);
+      else if(incidentDetails[index].criticality== "minor")
+        L.polyline(roadCoords, {color: 'orange'}).addTo(map).bindPopup(getPopup(incidentDetails[index]),customOptions);
+   else 
+      L.polyline(roadCoords, {color: 'purple'}).addTo(map).bindPopup(getPopup(incidentDetails[index]),customOptions);
     })
+var flowData=[]
+var flowPoints=[]
+flow.forEach(flowUnit=>{
+  var temp=[]
+  flowData.push(flowUnit.currentFlow)
+  flowUnit.location.shape.links.forEach(link=>{
+    // flowData.push(incident.incidentDetails)
+   temp=[...link.points]
+    })
+    flowPoints.push(temp)
+  })
 
-// map.fitBounds(polyline.getBounds())
+  flowPoints.forEach((road,index)=>{
+    var roadCoords=[]
+    road.forEach(coords=>{
+      roadCoords.push([coords.lat,coords.lng])
+    })
+    var line=L.polyline(roadCoords, {color: 'green'}).addTo(map)
+  })
+
 }
 
 // function getLocation() {
@@ -138,7 +154,7 @@ function temp(){
 //     map.setView(new L.LatLng(position.coords.latitude, position.coords.longitude), 13);
 //     let userMarker = L.marker([position.coords.latitude, position.coords.longitude]).addTo(map);
 //   }
-
+var streets
 
 window.onload = async () => {
   const getCoords = async () => {
@@ -151,18 +167,43 @@ window.onload = async () => {
     };
   };
   const coords = await getCoords();
-  L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=agLQ82PjypipwzXJBUWV',
-  {
-    attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
-   
-  }).addTo(map);
+  
   const initcords = await getIncidents(coords.lat,coords.long)
   console.log(initcords)
   map.setView(new L.LatLng(coords.lat, coords.long), 13);
   let userMarker = L.marker([coords.lat, coords.long]).addTo(map);
+  
+
+  var colored = L.tileLayer(
+    'https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager/{z}/{x}/{y}.png',
+    {
+      maxZoom: 18,
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, &copy; <a href="https://carto.com/attribution">CARTO</a>',
+    }
+  );
+  streets=L.tileLayer('https://api.maptiler.com/maps/streets/{z}/{x}/{y}.png?key=agLQ82PjypipwzXJBUWV',
+    {
+      attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+     
+    }).addTo(map);
+  googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+      maxZoom: 20,
+      subdomains:['mt0','mt1','mt2','mt3']
+  });
+  var baseMaps = {
+    "Colored": colored,
+    "satellite": googleSat,
+    "streets": streets
+  };
+  
+  var overlayMaps={}
+  var layerCOntrol=L.control.layers(baseMaps, overlayMaps,{ position: 'bottomright' }).addTo(map);
 
 }
-
+async function getFlow(lat,lng){
+  let response = await axios.get("https://data.traffic.hereapi.com/v7/flow?apiKey=Fy7bI6cEAp4BGKJ7QaPh6_kAOzVBQSTWCO303al7SB4&in=circle:"+lat+","+lng+";r=5000&locationReferencing=shape")
+  return response.data.results;
+}
 
 
   async function getIncidents(lat,lng){
@@ -172,9 +213,10 @@ window.onload = async () => {
 
 map.on('click', async function(e) {
    incidents=await getIncidents(e.latlng.lat,e.latlng.lng)
+   flow=await getFlow(e.latlng.lat,e.latlng.lng)
    temp()
    
-});
+}); 
 
 L.Routing.control({
   waypoints: [
@@ -187,10 +229,10 @@ L.Routing.control({
      styles: [{
     color:'blue',
     opacity: 1,
-    weight: 2
+    weight: 2,
+    className: 'animate'
   }]},
   collapsible:true
 }).addTo(map);
-L.Routing.itinerary({
-  
-})
+
+
