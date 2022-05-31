@@ -1,8 +1,13 @@
 # Team-zero
+<img src="https://cdn0.iconfinder.com/data/icons/construction-tool-16/128/Traffic-cone-caution-safety-road-512.png" align="left"
+     alt="Sroad safety" width="60" height="60">
 Road accidents are a regular source of concern for public safety, especially in our state during the upcoming season. Accident risk can be mitigated by driving carefully in accident-prone zones. Devise a solution to map out the accident-prone zones based on government released data.
+<br>
 
-<img src="https://cdn2.vectorstock.com/i/thumb-large/21/16/road-pathway-highway-icons-speed-drive-track-vector-33192116.jpg" align="middle"
-     alt="Sroad safety" width="120" height="178">
+<p align="center">
+  <img src="https://c.tenor.com/LNXHufgzGAwAAAAM/kermit-the-frog-drive.gif" alt="Size Limit CLI" width="738">
+</p>
+
 ## How It Works
 
 1. We are getting the JSON dataset from third party API providers.
@@ -21,3 +26,4 @@ Road accidents are a regular source of concern for public safety, especially in 
 3. Add weather related obstructions
 4. Index traffic signs
 5. Alert of the upcoming flagged streetname
+
