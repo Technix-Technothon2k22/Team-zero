@@ -12,9 +12,12 @@ Road accidents are a regular source of concern for public safety, especially in 
 5. we are providing 3 tilelayers for better visibilty and user convenience.
 6. For generating the route leaflet routing machine is utilised
 7. An optimised route along with possible alternate routes are created as the user drags the markers representing his source and destination
-8. Coordinates of the obstruction within 100M of route's coordinates are flagged using haversine formula
+8. Coordinates of the obstruction within 100M of route's coordinates are flagged using haversine formula and a call to google api will provide the street name
 9. Leaflet routing machine also provides a iternery for better UX
 
 ## Future Scope
 1. Add voice instructions based on iternary
 2. re route the path away from obstructions
+3. Add weather related obstructions
+4. Index traffic signs
+5. Alert of the upcoming flagged streetname
